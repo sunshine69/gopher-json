@@ -1,10 +1,9 @@
-package json
+package luajson
 
 import (
-	"encoding/json"
 	"testing"
-
-	"github.com/yuin/gopher-lua"
+	lua "github.com/yuin/gopher-lua"
+	jsoniter "github.com/json-iterator/go"
 )
 
 func TestSimple(t *testing.T) {
@@ -92,7 +91,7 @@ func TestDecodeValue_jsonNumber(t *testing.T) {
 	s := lua.NewState()
 	defer s.Close()
 
-	v := DecodeValue(s, json.Number("124.11"))
+	v := DecodeValue(s, jsoniter.Number("124.11"))
 	if v.Type() != lua.LTString || v.String() != "124.11" {
 		t.Fatalf("expecting LString, got %T", v)
 	}

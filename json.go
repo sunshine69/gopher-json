@@ -1,16 +1,19 @@
-package json
+package luajson
 
 import (
-	"encoding/json"
 	"errors"
+	lua "github.com/yuin/gopher-lua"
+	jsoniter "github.com/json-iterator/go"
+)
 
-	"github.com/yuin/gopher-lua"
+var (
+	json = jsoniter.ConfigCompatibleWithStandardLibrary
 )
 
 // Preload adds json to the given Lua state's package.preload table. After it
 // has been preloaded, it can be loaded using require:
 //
-//  local json = require("json")
+//	local json = require("json")
 func Preload(L *lua.LState) {
 	L.PreloadModule("json", Loader)
 }
@@ -159,7 +162,7 @@ func DecodeValue(L *lua.LState, value interface{}) lua.LValue {
 		return lua.LNumber(converted)
 	case string:
 		return lua.LString(converted)
-	case json.Number:
+	case jsoniter.Number:
 		return lua.LString(converted)
 	case []interface{}:
 		arr := L.CreateTable(len(converted), 0)
